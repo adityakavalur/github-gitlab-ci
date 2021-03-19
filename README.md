@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          # This should be the same as GITHUB_REPO below, this is the SOURCE_REPO which is being polled for commits and PRs
+          # This should be the same as SOURCE_REPO below which is being polled for commits and PRs
           repository: <namespace>/<repo_name>
           token: ${{ secrets.SOURCE_PAT }}
           fetch-depth: 0
@@ -41,7 +41,7 @@ jobs:
           POLL_TIMEOUT: "120"
           REPO_EVENT_TYPE: push
           BRANCH: main
-          GITHUB_REPO: <namespace>/<repo_name>
+          SOURCE_REPO: <namespace>/<repo_name>
           APPROVAL_STRING: triggerstring
           
 name: Internal PR
@@ -52,7 +52,7 @@ jobs:
     steps:        
       - uses: actions/checkout@v2
         with:
-          # This should be the same as GITHUB_REPO below, this is the SOURCE_REPO which is being polled for commits and PRs
+          # This should be the same as SOURCE_REPO below which is being polled for commits and PRs
           repository: <namespace>/<repo_name>
           token: ${{ secrets.SOURCE_PAT }}
           fetch-depth: 0
@@ -70,7 +70,7 @@ jobs:
           POLL_TIMEOUT: "120"
           REPO_EVENT_TYPE: internal_pr
           TARGET_BRANCH: main
-          GITHUB_REPO: <namespace>/<repo_name>
+          SOURCE_REPO: <namespace>/<repo_name>
           PR_NUMBER: <Optional>
           APPROVAL_STRING: <approval comment that authorizes commits by non-approved users>
 
@@ -82,6 +82,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          # This should be the same as SOURCE_REPO below which is being polled for commits and PRs
           repository: <namespace>/<repo_name>
           token: ${{ secrets.SOURCE_PAT }}
           fetch-depth: 0
@@ -99,7 +100,7 @@ jobs:
           POLL_TIMEOUT: "120"
           REPO_EVENT_TYPE: fork_pr
           TARGET_BRANCH: main
-          GITHUB_REPO: <namespace>/<repo_name>
+          SOURCE_REPO: <namespace>/<repo_name>
           PR_NUMBER: <Optional>
           APPROVAL_STRING: triggerstring
 ```
