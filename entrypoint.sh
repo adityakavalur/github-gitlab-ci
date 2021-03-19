@@ -145,7 +145,8 @@ fi
 #Retrieve Github username of SOURCE_PAT
 #This author is used for approval
 GITHUB_USERNAME=$(curl -H "Authorization: token ${SOURCE_PAT}" -H "Accept: application/vnd.github.v3+json" --silent https://api.github.com/user | jq .login) 
-
+#Target username
+GITLAB_USERNAME=$(curl --header "PRIVATE-TOKEN: ${TARGET_PAT}" --silent "https://${GITLAB_HOSTNAME}/api/v4/user" | jq .username | sed "s/\\\"/\\,/g" | sed s/\[,\]//g)
 
 #TODO: Add a list of required variables for each type of event. The job will fail if any are empty
 #In push there is no 'target branch', so we populate both variables with the same name
