@@ -1,6 +1,6 @@
 # Mirror to GitLab and trigger GitLab CI
 
-A GitHub Action that mirrors commits and pull requests from Github to GitLab. The workflow involves 3 repositories, namely: mirror, source(SOURCE_REPO) and target(GITLAB_PROJECT_ID). The mirror and source repositories need to be on Github whereas the target repository is on Gitlab. The mirror repository, through manual action/trigger scans the source repo and clones selective items to the target repository. Examples of github actions in the mirror repository are provided below. CI in Gitlab will be triggered based on the settings of the target repository. This action will wait and return the status and url of the pipeline back to the source repository on GitHub. 
+A GitHub Action that mirrors commits and pull requests from Github to GitLab. The workflow involves 3 repositories, namely: mirror, source(SOURCE_REPO) and target(TARGET_PROJECT_ID). The mirror and source repositories need to be on Github whereas the target repository is on Gitlab. The mirror repository, through manual action/trigger scans the source repo and clones selective items to the target repository. Examples of github actions in the mirror repository are provided below. CI in Gitlab will be triggered based on the settings of the target repository. This action will wait and return the status and url of the pipeline back to the source repository on GitHub. 
 
 To provide some level of security, branch `main` restricts what commits can be cloned (and therefore initiate CI) into Gitlab. Activites tied to the (approved-)user providing the SOURCE_PAT, a Github token, are eligible to be cloned. The events considered are push and pull requests. Commits, based in push or in a pull request, are eligible if they are authored by the approved-user or if the commit/PR has an approval comment associated with it. In the case of testing a PR the comment must be more recent than the latest commit. The approved user is expected to review the code before undertaking these actions. 
 
@@ -36,7 +36,7 @@ jobs:
           #The below password is a GITHUB PAT, GITHUB does not allow secrets with the name GITHUB in them.
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
-          GITLAB_PROJECT_ID: "<Gitlab project id>"
+          TARGET_PROJECT_ID: "<Gitlab project id>"
           POLL_TIMEOUT: "120"
           REPO_EVENT_TYPE: push
           BRANCH: main
@@ -64,7 +64,7 @@ jobs:
           TARGET_PAT: ${{ secrets.TARGET_PAT }}
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
-          GITLAB_PROJECT_ID: "<gitlab project id>"
+          TARGET_PROJECT_ID: "<gitlab project id>"
           POLL_TIMEOUT: "120"
           REPO_EVENT_TYPE: internal_pr
           TARGET_BRANCH: main
@@ -94,7 +94,7 @@ jobs:
           TARGET_PAT: ${{ secrets.TARGET_PAT }}
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
-          GITLAB_PROJECT_ID: "<gitlab project id>"
+          TARGET_PROJECT_ID: "<gitlab project id>"
           POLL_TIMEOUT: "120"
           REPO_EVENT_TYPE: fork_pr
           TARGET_BRANCH: main
