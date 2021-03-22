@@ -31,9 +31,8 @@ jobs:
           args: "https://gitlab.com/<namespace>/<repo_name>.git"
         env:
           TARGET_HOSTNAME: "gitlab.com"
-          GITLAB_USERNAME: "<your gitlab username>"
           #The below password is really a PAT, needs write
-          GITLAB_PASSWORD: ${{ secrets.GITLAB_PAT }}
+          TARGET_PAT: ${{ secrets.TARGET_PAT }}
           #The below password is a GITHUB PAT, GITHUB does not allow secrets with the name GITHUB in them.
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
@@ -62,8 +61,7 @@ jobs:
           args: "https://gitlab.com/<namespace>/<repo_name>.git"
         env:
           TARGET_HOSTNAME: "gitlab.com"
-          GITLAB_USERNAME: "<your gitlab username>"
-          GITLAB_PASSWORD: ${{ secrets.GITLAB_PAT }}
+          TARGET_PAT: ${{ secrets.TARGET_PAT }}
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
           GITLAB_PROJECT_ID: "<gitlab project id>"
@@ -91,9 +89,9 @@ jobs:
         with:
           args: "https://gitlab.com/<namespace>/<repo_name>.git"
         env:
+          # This should be gitlab.com or whatever your gitlab domain name is
           TARGET_HOSTNAME: "gitlab.com"
-          GITLAB_USERNAME: "<your gitlab username>"
-          GITLAB_PASSWORD: ${{ secrets.GITLAB_PAT }}
+          TARGET_PAT: ${{ secrets.TARGET_PAT }}
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
           GITLAB_PROJECT_ID: "<gitlab project id>"
@@ -105,4 +103,4 @@ jobs:
           APPROVAL_STRING: triggerstring
 ```
 
-Be sure to define the secrets `SOURCE_PAT` and `GITLAB_PAT` in secrets.
+Be sure to define the secrets `SOURCE_PAT` and `TARGET_PAT` in secrets.
