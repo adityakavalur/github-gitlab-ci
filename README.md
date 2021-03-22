@@ -30,7 +30,7 @@ jobs:
         with:
           args: "https://gitlab.com/<namespace>/<repo_name>.git"
         env:
-          GITLAB_HOSTNAME: "gitlab.com"
+          TARGET_HOSTNAME: "gitlab.com"
           GITLAB_USERNAME: "<your gitlab username>"
           #The below password is really a PAT, needs write
           GITLAB_PASSWORD: ${{ secrets.GITLAB_PAT }}
@@ -61,7 +61,7 @@ jobs:
         with:
           args: "https://gitlab.com/<namespace>/<repo_name>.git"
         env:
-          GITLAB_HOSTNAME: "gitlab.com"
+          TARGET_HOSTNAME: "gitlab.com"
           GITLAB_USERNAME: "<your gitlab username>"
           GITLAB_PASSWORD: ${{ secrets.GITLAB_PAT }}
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
@@ -91,7 +91,7 @@ jobs:
         with:
           args: "https://gitlab.com/<namespace>/<repo_name>.git"
         env:
-          GITLAB_HOSTNAME: "gitlab.com"
+          TARGET_HOSTNAME: "gitlab.com"
           GITLAB_USERNAME: "<your gitlab username>"
           GITLAB_PASSWORD: ${{ secrets.GITLAB_PAT }}
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
