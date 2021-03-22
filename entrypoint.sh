@@ -249,7 +249,7 @@ branch_uri="$(urlencode ${BRANCH})"
 if [ "${REPO_EVENT_TYPE}" = "push" ]
 then
    #Get the latest commit sha on the target gitlab repository. This is currently not being used but can provide a good sanity check.
-   base_commitsha=$(curl --header "PRIVATE-TOKEN: $TARGET_PAT" "https://${TARGET_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/repository/commits?ref_name=${BRANCH}" --silent | jq ".[0] | {id: .id}")
+   base_commitsha=$(curl --header "PRIVATE-TOKEN: $TARGET_PAT" "https://${TARGET_HOSTNAME}/api/v4/projects/${TARGET_PROJECT_ID}/repository/commits?ref_name=${BRANCH}" --silent | jq ".[0] | {id: .id}")
    #Run through the recent 100 commits to find the latest than can be cloned
    #Like the PR an acceptable commit is one which was commited by the user $GITHUB_USERNAME or has an approval comment by them
    sha="$(approvedcommitsha ${GITHUB_USERNAME} ${BRANCH})"
@@ -286,13 +286,13 @@ fi
 sleep $POLL_TIMEOUT
 
 #TODO: see if there is better way than taking the last pipeline
-pipeline_id=$(curl --header "PRIVATE-TOKEN: $TARGET_PAT" --silent "https://${TARGET_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/repository/commits/${BRANCH}" | jq '.last_pipeline.id')
+pipeline_id=$(curl --header "PRIVATE-TOKEN: $TARGET_PAT" --silent "https://${TARGET_HOSTNAME}/api/v4/projects/${TARGET_PROJECT_ID}/repository/commits/${BRANCH}" | jq '.last_pipeline.id')
 
 if [ "${pipeline_id}" = "null" ]
 then
     echo "pipeline_id is null, so we can't continue."
-    echo "Response from https://${TARGET_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/repository/commits/${BRANCH} was:"
-    echo $(curl --header "PRIVATE-TOKEN: $TARGET_PAT" --silent "https://${TARGET_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/repository/commits/${BRANCH}")
+    echo "Response from https://${TARGET_HOSTNAME}/api/v4/projects/${TARGET_PROJECT_ID}/repository/commits/${BRANCH} was:"
+    echo $(curl --header "PRIVATE-TOKEN: $TARGET_PAT" --silent "https://${TARGET_HOSTNAME}/api/v4/projects/${TARGET_PROJECT_ID}/repository/commits/${BRANCH}")
     exit 1
 fi
 
@@ -305,7 +305,7 @@ ci_status="pending"
 until [[ "$ci_status" != "pending" && "$ci_status" != "running" ]]
 do
    sleep $POLL_TIMEOUT
-   ci_output=$(curl --header "PRIVATE-TOKEN: $TARGET_PAT" --silent "https://${TARGET_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/pipelines/${pipeline_id}")
+   ci_output=$(curl --header "PRIVATE-TOKEN: $TARGET_PAT" --silent "https://${TARGET_HOSTNAME}/api/v4/projects/${TARGET_PROJECT_ID}/pipelines/${pipeline_id}")
    ci_status=$(jq -n "$ci_output" | jq -r .status)
    ci_web_url=$(jq -n "$ci_output" | jq -r .web_url)
    
@@ -339,7 +339,7 @@ then
   curl -d '{"state":"failure", "target_url": "'${ci_web_url}'", "context": "gitlab-ci"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}" 
   exit 1
 else # no return value, so there's no target URL either
-  echo "Pipeline ended without a ci_status: https://${TARGET_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/pipelines/${pipeline_id}"
+  echo "Pipeline ended without a ci_status: https://${TARGET_HOSTNAME}/api/v4/projects/${TARGET_PROJECT_ID}/pipelines/${pipeline_id}"
   curl -d '{"state":"failure", "context": "gitlab-ci"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}"
   exit 1
 fi
