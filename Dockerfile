@@ -5,7 +5,7 @@ LABEL "com.github.actions.description"="Mirroring of commits and pull requests t
 LABEL "com.github.actions.icon"="git-commit"
 LABEL "com.github.actions.color"="blue"
 
-LABEL "repository"="https://github.com/adityakavaluar/github-gitlab-ci"
+LABEL "repository"="https://github.com/adityakavalur/github-gitlab-ci"
 LABEL "homepage"="https://github.com/adityakavalur/github-gitlab-ci"
 LABEL "maintainer"="Aditya Kavalur"
 
