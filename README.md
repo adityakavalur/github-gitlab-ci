@@ -38,7 +38,7 @@ jobs:
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
           TARGET_PROJECT_ID: "<Gitlab project id>"
-          POLL_TIMEOUT: "120"
+          POLL_TIMEOUT: "<Optional, value in seconds, default is 10 seconds>"
           REPO_EVENT_TYPE: push
           BRANCH: main
           SOURCE_REPO: <namespace>/<repo_name>
@@ -69,7 +69,7 @@ jobs:
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
           TARGET_PROJECT_ID: "<gitlab project id>"
-          POLL_TIMEOUT: "120"
+          POLL_TIMEOUT: "<Optional, value in seconds, default is 10 seconds>"
           REPO_EVENT_TYPE: internal_pr
           SOURCE_REPO: <namespace>/<repo_name>
           PR_NUMBER: <Optional>
@@ -101,7 +101,7 @@ jobs:
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
           TARGET_PROJECT_ID: "<gitlab project id>"
-          POLL_TIMEOUT: "120"
+          POLL_TIMEOUT: "<Optional, value in seconds, default is 10 seconds>"
           REPO_EVENT_TYPE: fork_pr
           SOURCE_REPO: <namespace>/<repo_name>
           PR_NUMBER: <Optional>
