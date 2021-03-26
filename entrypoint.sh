@@ -319,11 +319,12 @@ done
 
 echo "Pipeline finished with status ${ci_status}"
 
-#Delete remote branch if PR
-if [[ "${REPO_EVENT_TYPE}" = "internal_pr" || "${REPO_EVENT_TYPE}" = "fork_pr" ]]
-then
-   sh -c "git push mirror --delete ${BRANCH}"
-fi
+#TODO: Incorporate a check on the Github PR to see if latest commit has already been tested. This is necessary if users need to automate pipelines. Will allow below deletion without wasting computing cycles.
+##Delete remote branch if PR
+#if [[ "${REPO_EVENT_TYPE}" = "internal_pr" || "${REPO_EVENT_TYPE}" = "fork_pr" ]]
+#then
+#   sh -c "git push mirror --delete ${BRANCH}"
+#fi
 
 if [ "$ci_status" = "success" ]
 then 
