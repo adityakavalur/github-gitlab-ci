@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SOURCE_REPO: <namespace>/<repo_name>
+      TARGET_REPO: "<complete url e.g. https://gitlab.com/namespace/repository.git>"
     steps:
       - uses: actions/checkout@v2
         with:
@@ -30,15 +31,12 @@ jobs:
       - name: Push testing on external Gitlab
         uses: adityakavalur/github-gitlab-ci@main
         with:
-          args: "https://gitlab.com/<namespace>/<repo_name>.git"
+          args: ${{ env.TARGET_REPO }}
         env:
-          TARGET_HOSTNAME: "gitlab.com"
-          #The below password is really a PAT, needs write
+          TARGET_HOSTNAME: "<domain name e.g. gitlab.com>"
           TARGET_PAT: ${{ secrets.TARGET_PAT }}
-          #The below password is a GITHUB PAT, GITHUB does not allow secrets with the name GITHUB in them.
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
-          TARGET_PROJECT_ID: "<Gitlab project id>"
           POLL_TIMEOUT: "<Optional, value in seconds, default is 10 seconds>"
           REPO_EVENT_TYPE: push
           BRANCH: main
@@ -54,6 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SOURCE_REPO: <namespace>/<repo_name>
+      TARGET_REPO: "<complete url e.g. https://gitlab.com/namespace/repository.git>"
     steps:        
       - uses: actions/checkout@v2
         with:
@@ -63,13 +62,12 @@ jobs:
       - name: Internal PR testing on external Gitlab
         uses: adityakavalur/github-gitlab-ci@main
         with:
-          args: "https://gitlab.com/<namespace>/<repo_name>.git"
+          args: ${{ env.TARGET_REPO }}
         env:
-          TARGET_HOSTNAME: "gitlab.com"
+          TARGET_HOSTNAME: "<domain name e.g. gitlab.com>"
           TARGET_PAT: ${{ secrets.TARGET_PAT }}
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
-          TARGET_PROJECT_ID: "<gitlab project id>"
           POLL_TIMEOUT: "<Optional, value in seconds, default is 10 seconds>"
           REPO_EVENT_TYPE: internal_pr
           PR_NUMBER: <Optional>
@@ -85,6 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SOURCE_REPO: <namespace>/<repo_name>
+      TARGET_REPO: "<complete url e.g. https://gitlab.com/namespace/repository.git>"      
     steps:
       - uses: actions/checkout@v2
         with:
@@ -94,14 +93,13 @@ jobs:
       - name: Fork PR testing on external Gitlab
         uses: adityakavalur/github-gitlab-ci@main
         with:
-          args: "https://gitlab.com/<namespace>/<repo_name>.git"
+          args: ${{ env.TARGET_REPO }}
         env:
           # This should be gitlab.com or whatever your gitlab domain name is
-          TARGET_HOSTNAME: "gitlab.com"
+          TARGET_HOSTNAME: "<domain name e.g. gitlab.com>"
           TARGET_PAT: ${{ secrets.TARGET_PAT }}
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
-          TARGET_PROJECT_ID: "<gitlab project id>"
           POLL_TIMEOUT: "<Optional, value in seconds, default is 10 seconds>"
           REPO_EVENT_TYPE: fork_pr
           PR_NUMBER: <Optional>
