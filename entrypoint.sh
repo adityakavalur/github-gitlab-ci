@@ -174,37 +174,39 @@ fi
 
 #If PR Number is specified use that or else find the latest acceptable PR
 #An acceptable PR is one that has the latest commit from the user $GITHUB_USERNAME or an approval comment by said user.
-if [[ $(printenv PR_NUMBER | wc -c) == "0" ]]
+if [[ "${REPO_EVENT_TYPE}" = "internal_pr" || "${REPO_EVENT_TYPE}" = "fork_pr" ]]
 then
-   # Cycle through all PRs 
-   ipr=-1
-   while [[ "$ipr" -lt "$(($npr-1))" ]]
-   do
-      ipr=$(($ipr+1))
-      echo "line 174: $ipr"
-      target_PR_NUMBER=$(curl --silent -H "Authorization: token ${SOURCE_PAT}" -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/pulls | jq ".[${ipr}] | {PR_NUMBER : .number}" | jq .PR_NUMBER)
-      echo "${target_PR_NUMBER}"
-      #Approvaltime is used to find the latest approved action, that PR will be targeted by CI.
-      #This function only returns PRs where the latest commit is approved. 
-      export temp_approvaltime="$(prapproval ${target_PR_NUMBER} ${GITHUB_USERNAME})"
-      if [[ ! -z ${temp_approvaltime} ]] 
-      then
-         if [[ $(printenv approvedtime | wc -c) = 0 ]]
+   if [[ $(printenv PR_NUMBER | wc -c) == "0" ]]
+   then
+      # Cycle through all PRs 
+      ipr=-1
+      while [[ "$ipr" -lt "$(($npr-1))" ]]
+      do
+         ipr=$(($ipr+1))
+         echo "line 174: $ipr"
+         target_PR_NUMBER=$(curl --silent -H "Authorization: token ${SOURCE_PAT}" -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/pulls | jq ".[${ipr}] | {PR_NUMBER : .number}" | jq .PR_NUMBER)
+         echo "${target_PR_NUMBER}"
+         #Approvaltime is used to find the latest approved action, that PR will be targeted by CI.
+         #This function only returns PRs where the latest commit is approved. 
+         export temp_approvaltime="$(prapproval ${target_PR_NUMBER} ${GITHUB_USERNAME})"
+         if [[ ! -z ${temp_approvaltime} ]] 
          then
-            export approvedtime=${temp_approvaltime}
-	    PR_NUMBER=${target_PR_NUMBER}         
-         elif [[ ${temp_approvaltime} > ${approvedtime} ]] 
-         then 
-            export approvedtime=${temp_approvaltime}
-	    PR_NUMBER=${target_PR_NUMBER}
-         fi
-      fi  
-   done
-else
-   # only check the specified PR.
-   export approvedtime="$(prapproval ${PR_NUMBER} ${GITHUB_USERNAME})"
+            if [[ $(printenv approvedtime | wc -c) = 0 ]]
+            then
+               export approvedtime=${temp_approvaltime}
+	       PR_NUMBER=${target_PR_NUMBER}         
+            elif [[ ${temp_approvaltime} > ${approvedtime} ]] 
+            then 
+               export approvedtime=${temp_approvaltime}
+	       PR_NUMBER=${target_PR_NUMBER}
+            fi
+         fi  
+      done
+   else
+      # only check the specified PR.
+      export approvedtime="$(prapproval ${PR_NUMBER} ${GITHUB_USERNAME})"
+   fi
 fi
-
 
 if [[ "${REPO_EVENT_TYPE}" = "internal_pr" || "${REPO_EVENT_TYPE}" = "fork_pr" ]]
 then
