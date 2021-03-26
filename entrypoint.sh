@@ -69,7 +69,7 @@ branchexists() (
     then
        #This error needs to go to MIRROR_REPO and not SOURCE_REPO
        echo "Target branch not found, CI job will exit"
-       curl -d '{"state":"failure", "context": "gitlab-ci"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}"
+       curl -d '{"state":"failure", "context": "'${TARGET_HOSTNAME}'"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}"
        exit 1
     fi
 )
@@ -281,7 +281,7 @@ push_status=$?
 if [[ "${push_status}" != "0" ]] 
 then
    echo "Unable to push to target repository, job will fail."
-   curl -d '{"state":"failure", "context": "gitlab-ci"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}"
+   curl -d '{"state":"failure", "context": "'${TARGET_HOSTNAME}'"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}"
    exit 1
 fi
 
@@ -315,7 +315,7 @@ do
    if [ "$ci_status" = "running" ]
    then
      echo "Checking pipeline status..."
-     curl -d '{"state":"pending", "target_url": "'${ci_web_url}'", "context": "gitlab-ci"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}"  > /dev/null 
+     curl -d '{"state":"pending", "target_url": "'${ci_web_url}'", "context": "'${TARGET_HOSTNAME}'"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}"  > /dev/null 
    fi
 done
 
@@ -327,21 +327,20 @@ then
    sh -c "git push mirror --delete ${BRANCH}"
 fi
 
-#TODO: change the context from gitlab-ci to something based on a variable
 if [ "$ci_status" = "success" ]
 then 
-  curl -d '{"state":"success", "target_url": "'${ci_web_url}'", "context": "gitlab-ci"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}" 
+  curl -d '{"state":"success", "target_url": "'${ci_web_url}'", "context": "'${TARGET_HOSTNAME}'"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}" 
   exit 0
 elif [ "$ci_status" = "manual" ] # do not return non-triggered manual builds as a CI failure
 then 
-  curl -d '{"state":"success", "target_url": "'${ci_web_url}'", "context": "gitlab-ci"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}" 
+  curl -d '{"state":"success", "target_url": "'${ci_web_url}'", "context": "'${TARGET_HOSTNAME}'"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}" 
   exit 0
 elif [ "$ci_status" = "failed" ]
 then 
-  curl -d '{"state":"failure", "target_url": "'${ci_web_url}'", "context": "gitlab-ci"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}" 
+  curl -d '{"state":"failure", "target_url": "'${ci_web_url}'", "context": "'${TARGET_HOSTNAME}'"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}" 
   exit 1
 else # no return value, so there's no target URL either
   echo "Pipeline ended without a ci_status: https://${TARGET_HOSTNAME}/api/v4/projects/${TARGET_PROJECT_ID}/pipelines/${pipeline_id}"
-  curl -d '{"state":"failure", "context": "gitlab-ci"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}"
+  curl -d '{"state":"failure", "context": "'${TARGET_HOSTNAME}'"}' -H "Authorization: token ${SOURCE_PAT}"  -H "Accept: application/vnd.github.antiope-preview+json" -X POST --silent "https://api.github.com/repos/${SOURCE_REPO}/statuses/${sha}"
   exit 1
 fi
