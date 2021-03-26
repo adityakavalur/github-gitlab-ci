@@ -39,7 +39,7 @@ jobs:
           POLL_TIMEOUT: "<Optional, value in seconds, default is 10 seconds>"
           REPO_EVENT_TYPE: push
           BRANCH: main
-          APPROVAL_STRING: <approval comment that authorizes commits by non-approved users>
+          APPROVAL_STRING: <Optional, approval comment that authorizes commits by non-approved users>
 ```
 
 Example of an action for mirroring a pull request from within the repository
@@ -69,7 +69,7 @@ jobs:
           POLL_TIMEOUT: "<Optional, value in seconds, default is 10 seconds>"
           REPO_EVENT_TYPE: internal_pr
           PR_NUMBER: <Optional>
-          APPROVAL_STRING: <approval comment that authorizes commits by non-approved users>
+          APPROVAL_STRING: <Optional, approval comment that authorizes commits by non-approved users>
 ```
 
 Example of an action for mirroring a pull request from a fork
@@ -99,7 +99,7 @@ jobs:
           POLL_TIMEOUT: "<Optional, value in seconds, default is 10 seconds>"
           REPO_EVENT_TYPE: fork_pr
           PR_NUMBER: <Optional>
-          APPROVAL_STRING: <approval comment that authorizes commits by non-approved users>
+          APPROVAL_STRING: <Optional, approval comment that authorizes commits by non-approved users>
 ```
 
 Be sure to define the secrets `SOURCE_PAT` and `TARGET_PAT` in secrets.
