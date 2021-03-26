@@ -10,7 +10,7 @@ Push workflows target a specific branch. Whereas PRs can target a specific PR by
 
 ## Example workflows
 
-There are 3 example workflows: push, internal pull request and fork pull request
+There are 3 example workflows that this action can support: push, internal pull request and fork pull request. You can leverage any or all of them. All fields are mandatory unless explicitly specified.
 
 ```workflow          
 name: Mirror commits
@@ -42,7 +42,9 @@ jobs:
           BRANCH: main
           SOURCE_REPO: <namespace>/<repo_name>
           APPROVAL_STRING: <approval comment that authorizes commits by non-approved users>
-          
+```
+
+```workflow 
 name: Internal PR
 on: workflow_dispatch
 jobs:
@@ -70,7 +72,9 @@ jobs:
           SOURCE_REPO: <namespace>/<repo_name>
           PR_NUMBER: <Optional>
           APPROVAL_STRING: <approval comment that authorizes commits by non-approved users>
+```
 
+```workflow
 name: Fork PR
 on: workflow_dispatch
 jobs:
