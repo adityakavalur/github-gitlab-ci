@@ -141,6 +141,8 @@ then
    exit 1
 fi
 
+#Retrieve TARGET_HOSTNAME from TARGET_REPO
+export TARGET_HOSTNAME=$(echo $TARGET_REPO | awk -F/ '{print $3}')
 
 #Retrieve Github username of SOURCE_PAT
 #This author is used for approval
