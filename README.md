@@ -33,7 +33,6 @@ jobs:
         with:
           args: ${{ env.TARGET_REPO }}
         env:
-          TARGET_HOSTNAME: "<domain name e.g. gitlab.com>"
           TARGET_PAT: ${{ secrets.TARGET_PAT }}
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
@@ -64,7 +63,6 @@ jobs:
         with:
           args: ${{ env.TARGET_REPO }}
         env:
-          TARGET_HOSTNAME: "<domain name e.g. gitlab.com>"
           TARGET_PAT: ${{ secrets.TARGET_PAT }}
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
@@ -95,8 +93,6 @@ jobs:
         with:
           args: ${{ env.TARGET_REPO }}
         env:
-          # This should be gitlab.com or whatever your gitlab domain name is
-          TARGET_HOSTNAME: "<domain name e.g. gitlab.com>"
           TARGET_PAT: ${{ secrets.TARGET_PAT }}
           SOURCE_PAT: ${{ secrets.SOURCE_PAT }}
           GITHUB_TOKEN: ${{ secrets.SOURCE_PAT }}
