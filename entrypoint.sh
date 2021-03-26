@@ -41,8 +41,12 @@ approvedcommitsha() (
        do
           icomment=$(($icomment - 1))
           commentauthor=$(curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/commits/$sha/comments | jq ".[$icomment] | {commentauthor: .user.login}" | jq ".commentauthor")
-	  curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/commits/$sha/comments | jq ".[$icomment] | {body: .body}"  | grep $APPROVAL_STRING -q
-	  approval_comment=$?
+          approval_comment=1
+	  if [[ ! -z $APPROVAL_STRING ]]
+	  then
+             curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/commits/$sha/comments | jq ".[$icomment] | {body: .body}"  | grep $APPROVAL_STRING -q
+	     approval_comment=$?
+	  fi
 	  if [[ $commentauthor == $GITHUB_USERNAME && $approval_comment == "0" ]]; then approved=0; fi
        done
     done
@@ -110,8 +114,12 @@ prapproval() (
        do
           icomment=$(($icomment - 1))
           #check comment for string
-          curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/issues/${PR_NUMBER}/comments | jq ".[$icomment] | {body: .body}" | grep $APPROVAL_STRING -q
-          approval_comment=$?
+	  approval_comment=1
+	  if [[ ! -z $APPROVAL_STRING ]]
+	  then
+             curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/issues/${PR_NUMBER}/comments | jq ".[$icomment] | {body: .body}" | grep $APPROVAL_STRING -q
+             approval_comment=$?
+	  fi
 	  commentdate=$(curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/issues/${PR_NUMBER}/comments | jq ".[${icomment}] | {created_at: .created_at}" | jq ".created_at")
           #if string matches check if commenter belongs to the pre-approved list and the comment is newer than the latest commit
           if [[ "${approval_comment}" = "0" && ${commentdate} > ${commitdate} ]]
