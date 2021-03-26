@@ -19,11 +19,12 @@ on: workflow_dispatch
 jobs:
   pushmirror:
     runs-on: ubuntu-latest
+    env:
+      SOURCE_REPO: <namespace>/<repo_name>
     steps:
       - uses: actions/checkout@v2
         with:
-          # This should be the same as SOURCE_REPO below which is being polled for commits and PRs
-          repository: <namespace>/<repo_name>
+          repository: ${{ env.SOURCE_REPO }}
           token: ${{ secrets.SOURCE_PAT }}
           fetch-depth: 0
       - name: Push testing on external Gitlab
@@ -41,7 +42,6 @@ jobs:
           POLL_TIMEOUT: "<Optional, value in seconds, default is 10 seconds>"
           REPO_EVENT_TYPE: push
           BRANCH: main
-          SOURCE_REPO: <namespace>/<repo_name>
           APPROVAL_STRING: <approval comment that authorizes commits by non-approved users>
 ```
 
@@ -52,11 +52,12 @@ on: workflow_dispatch
 jobs:
   internalpr:
     runs-on: ubuntu-latest
+    env:
+      SOURCE_REPO: <namespace>/<repo_name>
     steps:        
       - uses: actions/checkout@v2
         with:
-          # This should be the same as SOURCE_REPO below which is being polled for commits and PRs
-          repository: <namespace>/<repo_name>
+          repository: ${{ env.SOURCE_REPO }}
           token: ${{ secrets.SOURCE_PAT }}
           fetch-depth: 0
       - name: Internal PR testing on external Gitlab
@@ -71,7 +72,6 @@ jobs:
           TARGET_PROJECT_ID: "<gitlab project id>"
           POLL_TIMEOUT: "<Optional, value in seconds, default is 10 seconds>"
           REPO_EVENT_TYPE: internal_pr
-          SOURCE_REPO: <namespace>/<repo_name>
           PR_NUMBER: <Optional>
           APPROVAL_STRING: <approval comment that authorizes commits by non-approved users>
 ```
@@ -83,11 +83,12 @@ on: workflow_dispatch
 jobs:
   forkpr:
     runs-on: ubuntu-latest
+    env:
+      SOURCE_REPO: <namespace>/<repo_name>
     steps:
       - uses: actions/checkout@v2
         with:
-          # This should be the same as SOURCE_REPO below which is being polled for commits and PRs
-          repository: <namespace>/<repo_name>
+          repository: ${{ env.SOURCE_REPO }}
           token: ${{ secrets.SOURCE_PAT }}
           fetch-depth: 0
       - name: Fork PR testing on external Gitlab
@@ -103,7 +104,6 @@ jobs:
           TARGET_PROJECT_ID: "<gitlab project id>"
           POLL_TIMEOUT: "<Optional, value in seconds, default is 10 seconds>"
           REPO_EVENT_TYPE: fork_pr
-          SOURCE_REPO: <namespace>/<repo_name>
           PR_NUMBER: <Optional>
           APPROVAL_STRING: <approval comment that authorizes commits by non-approved users>
 ```
