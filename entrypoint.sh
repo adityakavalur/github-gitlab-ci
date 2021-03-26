@@ -150,7 +150,7 @@ GITLAB_USERNAME=$(curl --header "PRIVATE-TOKEN: ${TARGET_PAT}" --silent "https:/
 
 #Determine TARGET_PROJECT_ID from TARGET_REPO
 TARGET_PROJECT_NAME=$(echo $TARGET_REPO | awk -F/ '{print $NF}' | sed -e "s/.git//g")
-TARGET_PROJECT_ID=$(curl --header "PRIVATE-TOKEN: ${TARGET_PAT}" -X GET --silent 'https://${TARGET_HOSTNAME}/api/v4/projects?search=${TARGET_PROJECT_NAME}' | jq ".[0] | {id: .id}" | jq .id)
+TARGET_PROJECT_ID=$(curl --header "PRIVATE-TOKEN: ${TARGET_PAT}" -X GET --silent "https://${TARGET_HOSTNAME}/api/v4/projects?search=${TARGET_PROJECT_NAME}" | jq ".[0] | {id: .id}" | jq .id)
 
 #TODO: Add a list of required variables for each type of event. The job will fail if any are empty
 branchfound="$(branchexists ${BRANCH})"
