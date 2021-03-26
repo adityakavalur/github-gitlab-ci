@@ -149,14 +149,12 @@ GITHUB_USERNAME=$(curl -H "Authorization: token ${SOURCE_PAT}" -H "Accept: appli
 GITLAB_USERNAME=$(curl --header "PRIVATE-TOKEN: ${TARGET_PAT}" --silent "https://${TARGET_HOSTNAME}/api/v4/user" | jq .username | sed "s/\\\"/\\,/g" | sed s/\[,\]//g)
 
 #TODO: Add a list of required variables for each type of event. The job will fail if any are empty
-#In push there is no 'target branch', so we populate both variables with the same name
-if [[ "${REPO_EVENT_TYPE}" == "push" ]]; then TARGET_BRANCH=${BRANCH}; fi
-branchfound="$(branchexists ${TARGET_BRANCH})"
+branchfound="$(branchexists ${BRANCH})"
 
 #Maybe move the below branch check along with the overall variable values check (after that is implemented)
 if [[ ${branchfound} != "0" ]]
 then
-   echo "Branch ${TARGET_BRANCH} not found in the repo, CI job will exit"
+   echo "Branch ${BRANCH} not found in the repo, CI job will exit"
    exit 1
 fi
 
