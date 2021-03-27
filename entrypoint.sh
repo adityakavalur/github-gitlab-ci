@@ -167,7 +167,7 @@ echo "retrieved TARGET_PROJECT_NAME: ${TARGET_PROJECT_NAME}"
 echo "retrieved TARGET_PROJECT_ID: ${TARGET_PROJECT_ID}"
 
 #TODO: Add a list of required variables for each type of event. The job will fail if any are empty
-if [[ ! -z ${BRANCH} ]]
+if [[ $(printenv BRANCH | wc -c) != "0" ]]
 then
    branchfound="$(branchexists ${BRANCH})"
    #Maybe move the below branch check along with the overall variable values check (after that is implemented)
