@@ -105,7 +105,7 @@ prapproval() (
     if [[ $commitauthor == $GITHUB_USERNAME ]]; then approved=0; printf "${commitdate}"; fi
     
     #If commit author is not approved, check comments
-    if [[ ${approved} != "0" ]]
+    if [[ ${approved} != "0"  && ! -z $APPROVAL_STRING ]]
     then
        ncomments=$(curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/issues/${PR_NUMBER}/comments | jq length)
        approval_comment=1
@@ -114,12 +114,8 @@ prapproval() (
        do
           icomment=$(($icomment - 1))
           #check comment for string
-	  approval_comment=1
-	  if [[ ! -z $APPROVAL_STRING ]]
-	  then
-             curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/issues/${PR_NUMBER}/comments | jq ".[$icomment] | {body: .body}" | grep $APPROVAL_STRING -q
-             approval_comment=$?
-	  fi
+          curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/issues/${PR_NUMBER}/comments | jq ".[$icomment] | {body: .body}" | grep $APPROVAL_STRING -q
+          approval_comment=$?
 	  commentdate=$(curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/issues/${PR_NUMBER}/comments | jq ".[${icomment}] | {created_at: .created_at}" | jq ".created_at")
           #if string matches check if commenter belongs to the pre-approved list and the comment is newer than the latest commit
           if [[ "${approval_comment}" = "0" && ${commentdate} > ${commitdate} ]]
