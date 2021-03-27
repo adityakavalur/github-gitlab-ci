@@ -136,6 +136,8 @@ prapproval() (
 
 #TODO: If below preapproved is set to 0, all the checks should be short-circuited.
 preapproved=1
+approved=$(preapproved)
+
 DEFAULT_POLL_TIMEOUT=10
 POLL_TIMEOUT=${POLL_TIMEOUT:-$DEFAULT_POLL_TIMEOUT}
 
