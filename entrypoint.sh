@@ -136,7 +136,7 @@ prapproval() (
 
 #TODO: If below preapproved is set to 0, all the checks should be short-circuited.
 preapproved=1
-approved=$(preapproved)
+approved=$preapproved
 
 DEFAULT_POLL_TIMEOUT=10
 POLL_TIMEOUT=${POLL_TIMEOUT:-$DEFAULT_POLL_TIMEOUT}
@@ -167,14 +167,17 @@ echo "retrieved TARGET_PROJECT_NAME: ${TARGET_PROJECT_NAME}"
 echo "retrieved TARGET_PROJECT_ID: ${TARGET_PROJECT_ID}"
 
 #TODO: Add a list of required variables for each type of event. The job will fail if any are empty
-branchfound="$(branchexists ${BRANCH})"
-
-#Maybe move the below branch check along with the overall variable values check (after that is implemented)
-if [[ ${branchfound} != "0" ]]
+if [[ ! -z ${BRANCH} ]]
 then
-   echo "Branch ${BRANCH} not found in the repo, CI job will exit"
-   exit 1
+   branchfound="$(branchexists ${BRANCH})"
+   #Maybe move the below branch check along with the overall variable values check (after that is implemented)
+   if [[ ${branchfound} != "0" ]]
+   then
+      echo "Branch ${BRANCH} not found in the repo, CI job will exit"
+      exit 1
+   fi
 fi
+
 
 #Maybe move the below pr check along with the overall variable values check (after that is implemented)
 if [[ "${REPO_EVENT_TYPE}" = "internal_pr" || "${REPO_EVENT_TYPE}" = "fork_pr" ]]
