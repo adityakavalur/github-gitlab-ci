@@ -102,7 +102,8 @@ prapproval() (
     if [[ $commitauthor == $GITHUB_USERNAME ]]; then approved=0; printf "${commitdate}"; fi
     
     #If commit author is not approved, check comments
-    echo "line 105: $APPROVAL_STRING"
+    echo "line 105: ${APPROVAL_STRING}"
+    echo "line 106: ${REPO_EVENT_TYPE}"
     if [[ ${approved} != "0"  && ! -z $APPROVAL_STRING ]]
     then
        ncomments=$(curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/issues/${PR_NUMBER}/comments | jq length)
