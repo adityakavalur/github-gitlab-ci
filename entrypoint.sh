@@ -114,7 +114,7 @@ prapproval() (
           approval_comment=$?
 	  commentdate=$(curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/issues/${PR_NUMBER}/comments | jq ".[${icomment}] | {created_at: .created_at}" | jq ".created_at" | sed 's/"//g' | sed 's/-//g' | sed 's/://g' | sed 's/T//g' | sed 's/Z//g')
           #if string matches check if commenter belongs to the pre-approved list and the comment is newer than the latest commit
-          if [[ "${approval_comment}" = "0" && ${commentdate} > ${commitdate} ]]
+          if [[ "${approval_comment}" = "0" && ${commentdate} -gt ${commitdate} ]]
           then
              commentauthor=$(curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/issues/${PR_NUMBER}/comments | jq ".[$icomment] | {commenter: .user.login}" | jq ".commenter")
 	     if [[ $commentauthor == $GITHUB_USERNAME ]]; then approved=0; printf "${commentdate}"; fi
@@ -204,7 +204,7 @@ then
             then
                export approvedtime=${temp_approvaltime}
 	       PR_NUMBER=${target_PR_NUMBER}         
-            elif [[ ${temp_approvaltime} > ${approvedtime} ]] 
+            elif [[ ${temp_approvaltime} -gt ${approvedtime} ]] 
             then 
 	       echo "line 210 ${temp_approvaltime} , ${approvedtime}"
 	       echo "line 211 ${target_PR_NUMBER} , ${PR_NUMBER}"
