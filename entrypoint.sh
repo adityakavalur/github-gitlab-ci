@@ -234,6 +234,8 @@ if [ "${REPO_EVENT_TYPE}" = "internal_pr" ]
 then
    BRANCH=$(curl --silent -H "Authorization: token ${SOURCE_PAT}" -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/pulls/${PR_NUMBER} | jq .head.ref | sed "s/\\\"/\\,/g" | sed s/\[,\]//g)
    git checkout "${BRANCH}"
+   BRANCH=internal-pr-${PR_NUMBER}
+   git branch -m ${BRANCH}
    sha=$(git rev-parse HEAD)
 elif [  "${REPO_EVENT_TYPE}" = "push"  ]
 then
