@@ -207,7 +207,7 @@ then
 	       PR_NUMBER=${target_PR_NUMBER}         
             elif [[ ${temp_approvaltime} > ${approvedtime} ]] 
             then 
-	       echo "line 210: ${appovedtime} , ${temp_approvaltime}"
+	       echo "line 210: ${approvedtime} , ${temp_approvaltime}"
 	       echo "line 211: ${PR_NUMBER} , ${target_PR_NUMBER}"
                export approvedtime=${temp_approvaltime}
 	       PR_NUMBER=${target_PR_NUMBER}
