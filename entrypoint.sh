@@ -195,9 +195,7 @@ then
       while [[ "$ipr" -lt "$(($npr-1))" ]]
       do
          ipr=$(($ipr+1))
-         echo "line 174: $ipr"
          target_PR_NUMBER=$(curl --silent -H "Authorization: token ${SOURCE_PAT}" -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/pulls | jq ".[${ipr}] | {PR_NUMBER : .number}" | jq .PR_NUMBER)
-         echo "${target_PR_NUMBER}"
          #Approvaltime is used to find the latest approved action, that PR will be targeted by CI.
          #This function only returns PRs where the latest commit is approved. 
          export temp_approvaltime="$(prapproval ${target_PR_NUMBER} ${GITHUB_USERNAME})"
