@@ -80,8 +80,6 @@ branchexists() (
 prapproval() (
     PR_NUMBER=$1
     GITHUB_USERNAME=$2
-    REPO_EVENT_TYPE=$3
-    APPROVAL_STRING=$4
 
     approved=1
     
@@ -104,10 +102,6 @@ prapproval() (
     if [[ $commitauthor == $GITHUB_USERNAME ]]; then approved=0; printf "${commitdate}"; fi
     
     #If commit author is not approved, check comments
-    #echo "line 105 ${APPROVAL_STRING}"
-    #echo "line 106 ${REPO_EVENT_TYPE}"
-    #echo "line 107 ${GITHUB_USERNAME}"
-    printf "line108"
     if [[ ${approved} != "0"  && ! -z $APPROVAL_STRING ]]
     then
        ncomments=$(curl -H "Authorization: token ${SOURCE_PAT}" --silent -H "Accept: application/vnd.github.antiope-preview+json" https://api.github.com/repos/${SOURCE_REPO}/issues/${PR_NUMBER}/comments | jq length)
@@ -207,7 +201,7 @@ then
          echo "${target_PR_NUMBER}"
          #Approvaltime is used to find the latest approved action, that PR will be targeted by CI.
          #This function only returns PRs where the latest commit is approved. 
-         export temp_approvaltime="$(prapproval ${target_PR_NUMBER} ${GITHUB_USERNAME} ${REPO_EVENT_TYPE} ${APPROVAL_STRING})"
+         export temp_approvaltime="$(prapproval ${target_PR_NUMBER} ${GITHUB_USERNAME})"
          if [[ ! -z ${temp_approvaltime} ]] 
          then
             if [[ $(printenv approvedtime | wc -c) = 0 ]]
@@ -223,7 +217,7 @@ then
       done
    else
       # only check the specified PR.
-      export approvedtime="$(prapproval ${PR_NUMBER} ${GITHUB_USERNAME} ${REPO_EVENT_TYPE} ${APPROVAL_STRING})"
+      export approvedtime="$(prapproval ${PR_NUMBER} ${GITHUB_USERNAME})"
    fi
 fi
 
