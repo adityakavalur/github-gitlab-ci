@@ -106,3 +106,5 @@ jobs:
 ```
 
 Be sure to define the secrets `SOURCE_PAT` and `TARGET_PAT` in secrets.
+
+This repo expands on work done by SvanBoxel in https://github.com/SvanBoxel/gitlab-mirror-and-ci-action
