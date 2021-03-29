@@ -1,0 +1,16 @@
+name: 'Github-Gitlab-CI'
+description: 'Clone to gitlab, trigger CI and post result links back to Github'
+author: 'Aditya Kavalur'
+inputs:
+  source_repo:
+    description: Source repository on github.com
+    required: True
+  target_repo:
+    description: Target gitlab repository, needs to be complete url
+    required: True
+  source_pat:
+    description: Personal access token on github.com
+    required: True
+  target_pat:
+    description: Personal access token for the target gitlab instance
+    required: True
