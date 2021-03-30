@@ -14,3 +14,6 @@ inputs:
   target_pat:
     description: Personal access token for the target gitlab instance
     required: True
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
