@@ -32,7 +32,7 @@ jobs:
           token: ${{ secrets.SOURCE_PAT }}
           fetch-depth: 0
       - name: Push testing on external Gitlab
-        uses: adityakavalur/github-gitlab-ci@main
+        uses: adityakavalur/github-gitlab-ci@v0.1.1
         with:
           args: ${{ env.TARGET_REPO }}
         env:
